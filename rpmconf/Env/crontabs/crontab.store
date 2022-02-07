@@ -13,7 +13,3 @@
 # Invoke "ComputeAggregateQuotaUsageRequest" periodically
 #
 15 2 * * *	/opt/zextras/libexec/zmcomputequotausage > /dev/null 2>&1
-#
-# Run zmgsaupdate util to trickeSync galsync accounts
-#
-49 0 * * 7	/opt/zextras/libexec/zmgsaupdate > /dev/null 2>&1

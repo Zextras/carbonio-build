@@ -5710,7 +5710,7 @@ sub configCreateDefaultDomainGALSyncAcct {
     my $zimbra_server = getLocalConfig ("zimbra_server_hostname");
     my $default_domain = (($newinstall) ? "$config{CREATEDOMAIN}" : "$config{zimbraDefaultDomainName}");
     my $galsyncacct = "galsync." . lc(genRandomPass()) . '@' . $default_domain ;
-    my $rc = runAsZextras("/opt/zextras/bin/zmgsautil createAccount -a $galsyncacct -n InternalGAL --domain $default_domain -s $zimbra_server -t zimbra -f _InternalGAL");
+    my $rc = runAsZextras("/opt/zextras/bin/zmgsautil createAccount -a $galsyncacct -n InternalGAL --domain $default_domain -s $zimbra_server -t zimbra -f _InternalGAL -p 7d");
     progress(($rc == 0) ? "done.\n" : "failed.\n");
     configLog("configCreateDefaultDomainGALSyncAcct") if ($rc == 0);
   }
