@@ -5940,11 +5940,10 @@ sub applyConfig {
   }
 
   # Create new dhparam key if new install
-  if($newinstall) {
-    progress( "Generating dhparam key..." );
-    runAsZextras ("/opt/zextras/bin/zmdhparam set -new 2048");
-    progress ( "done.\n" );
-  }
+  progress( "Generating dhparam key..." );
+  runAsZextras ("/opt/zextras/bin/zmdhparam set -new 2048");
+  progress ( "done.\n" );
+
 
   configLog ("END");
 
