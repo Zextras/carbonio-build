@@ -5939,6 +5939,13 @@ sub applyConfig {
     runAsZextras ("/opt/zextras/bin/zmupdateauthkeys");
   }
 
+  # Create new dhparam key if new install
+  if($newinstall) {
+    progress( "Generating dhparam key..." );
+    runAsZextras ("/opt/zextras/bin/zmdhparam set -new 2048");
+    progress ( "done.\n" );
+  }
+
   configLog ("END");
 
   print H time(),": CONFIG SESSION COMPLETE\n";
