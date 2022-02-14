@@ -5939,11 +5939,16 @@ sub applyConfig {
     runAsZextras ("/opt/zextras/bin/zmupdateauthkeys");
   }
 
-  # Create new dhparam key if new install
+  # Create new dhparam key for install
   progress( "Generating dhparam key..." );
   runAsZextras ("/opt/zextras/bin/zmdhparam set -new 2048");
   progress ( "done.\n" );
 
+  progress ( "Re-Starting servers..." );
+  runAsZextras ("/opt/zextras/bin/zmcontrol stop");
+  runAsZextras ("/opt/zextras/bin/zmcontrol start");
+  qx($SU "/opt/zextras/bin/zmcontrol status");
+  progress ( "done.\n" );
 
   configLog ("END");
 
