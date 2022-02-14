@@ -1,3 +1,7 @@
+Defaults:zextras !requiretty
+
+%zextras ALL=NOPASSWD:/opt/zextras/libexec/zmstat-fd *
+%zextras ALL=NOPASSWD:/opt/zextras/libexec/zmslapd
 %zextras ALL=NOPASSWD:/opt/zextras/common/sbin/postfix
 %zextras ALL=NOPASSWD:/opt/zextras/common/sbin/postalias
 %zextras ALL=NOPASSWD:/opt/zextras/common/sbin/qshape.pl
@@ -7,3 +11,4 @@
 %zextras ALL=NOPASSWD:/opt/zextras/libexec/zmqstat
 %zextras ALL=NOPASSWD:/opt/zextras/libexec/zmmtastatus
 %zextras ALL=NOPASSWD:/opt/zextras/common/sbin/amavis-mc
+%zextras ALL=NOPASSWD:/opt/zextras/libexec/zmmailboxdmgr

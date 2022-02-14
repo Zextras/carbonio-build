@@ -21,14 +21,10 @@ source "$SCRIPT_DIR/utils.sh"
 
 main() {
   echo -e "\tCreate package directories"
-  mkdir -p ${repoDir}/zm-build/${currentPackage}/etc/sudoers.d
   mkdir -p ${repoDir}/zm-build/${currentPackage}/opt/zextras/bin
   mkdir -p ${repoDir}/zm-build/${currentPackage}/opt/zextras/conf/templates
 
   echo -e "\tCopy package files"
-
-  echo -e "\tCopy etc files"
-  cp ${repoDir}/zm-build/rpmconf/Env/sudoers.d/02_carbonio-store ${repoDir}/zm-build/${currentPackage}/etc/sudoers.d/02_carbonio-store
 
   echo -e "\tCopy bin files of /opt/zextras/"
 

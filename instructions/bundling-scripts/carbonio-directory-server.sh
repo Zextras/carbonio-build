@@ -23,11 +23,9 @@ source "$SCRIPT_DIR/utils.sh"
 main() {
   echo -e "\tCreate package directories"
   mkdir -p ${repoDir}/zm-build/${currentPackage}/opt/zextras/common/etc/openldap/zimbra
-  mkdir -p ${repoDir}/zm-build/${currentPackage}/etc/sudoers.d
 
   echo -e "\tCopy package files"
   cp -rf ${ldapSchemaDir}/* ${repoDir}/zm-build/${currentPackage}/opt/zextras/common/etc/openldap/zimbra
-  cp ${repoDir}/zm-build/rpmconf/Env/sudoers.d/02_carbonio-ldap ${repoDir}/zm-build/${currentPackage}/etc/sudoers.d/
 }
 
 ############################################################################

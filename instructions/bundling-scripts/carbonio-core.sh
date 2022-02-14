@@ -23,8 +23,7 @@ main()
 {
    set -e
 
-   Copy ${repoDir}/zm-build/rpmconf/Env/sudoers.d/01_carbonio                                         ${repoDir}/zm-build/${currentPackage}/etc/sudoers.d/01_carbonio
-   Copy ${repoDir}/zm-build/rpmconf/Env/sudoers.d/02_carbonio-core                                    ${repoDir}/zm-build/${currentPackage}/etc/sudoers.d/02_carbonio-core
+   Copy ${repoDir}/zm-build/rpmconf/Env/sudoers.d/carbonio                                         ${repoDir}/zm-build/${currentPackage}/etc/sudoers.d/carbonio
 
    Copy ${repoDir}/zm-amavis/conf/amavisd.conf.in                                                   ${repoDir}/zm-build/${currentPackage}/opt/zextras/conf/amavisd.conf.in
    Copy ${repoDir}/zm-amavis/conf/amavisd/amavisd-custom.conf                                       ${repoDir}/zm-build/${currentPackage}/opt/zextras/conf/amavisd-custom.conf

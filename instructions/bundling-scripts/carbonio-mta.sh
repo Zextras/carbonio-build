@@ -15,7 +15,6 @@ currentPackage=$(echo ${currentScript}build | cut -d "-" -f 2) # mtabuild
 #-------------------- Build Package ---------------------------
 main() {
   echo -e "\tCreate package directories"
-  mkdir -p ${repoDir}/zm-build/${currentPackage}/etc/sudoers.d
   mkdir -p ${repoDir}/zm-build/${currentPackage}/opt/zextras/common/conf
   mkdir -p ${repoDir}/zm-build/${currentPackage}/opt/zextras/data/amavisd/mysql
   mkdir -p ${repoDir}/zm-build/${currentPackage}/opt/zextras/data/altermime
@@ -25,7 +24,6 @@ main() {
   mkdir -p ${repoDir}/zm-build/${currentPackage}/opt/zextras/data/postfix
 
   echo -e "\tCopy package files"
-  cp ${repoDir}/zm-build/rpmconf/Env/sudoers.d/02_carbonio-mta ${repoDir}/zm-build/${currentPackage}/etc/sudoers.d/02_carbonio-mta
   cp ${repoDir}/zm-postfix/conf/postfix/master.cf.in ${repoDir}/zm-build/${currentPackage}/opt/zextras/common/conf/master.cf.in
   cp ${repoDir}/zm-postfix/conf/postfix/tag_as_foreign.re.in ${repoDir}/zm-build/${currentPackage}/opt/zextras/common/conf/tag_as_foreign.re.in
   cp ${repoDir}/zm-postfix/conf/postfix/tag_as_originating.re.in ${repoDir}/zm-build/${currentPackage}/opt/zextras/common/conf/tag_as_originating.re.in
