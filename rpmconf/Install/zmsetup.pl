@@ -5827,7 +5827,6 @@ sub applyConfig {
     progress ("done.\n");
   }
 
-
   # Added the following for bug 103803. Could not just add the cert as a globalConfigValue
   # for zimbraSSldHParam.  See bug 104244.
   setLdapGlobalConfig("zimbraSSLDHParam", "/opt/zextras/conf/dhparam.pem.zcs") if $newinstall;
