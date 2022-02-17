@@ -70,7 +70,6 @@ main()
    Copy ${repoDir}/zm-build/rpmconf/Install/preinstall.pm                                           ${repoDir}/zm-build/${currentPackage}/opt/zextras/libexec/preinstall.pm
    Copy ${repoDir}/zm-build/rpmconf/Install/zmsetup.pl                                              ${repoDir}/zm-build/${currentPackage}/opt/zextras/libexec/zmsetup.pl
 
-   Copy ${repoDir}/zm-core-utils/conf/dhparam.pem.zcs                                               ${repoDir}/zm-build/${currentPackage}/opt/zextras/conf/dhparam.pem.zcs
    Copy ${repoDir}/zm-core-utils/conf/zmlogrotate                                                   ${repoDir}/zm-build/${currentPackage}/opt/zextras/conf/zmlogrotate
    Copy ${repoDir}/zm-core-utils/src/bin/antispam-mysql                                             ${repoDir}/zm-build/${currentPackage}/opt/zextras/bin/antispam-mysql
    Copy ${repoDir}/zm-core-utils/src/bin/antispam-mysql.server                                      ${repoDir}/zm-build/${currentPackage}/opt/zextras/bin/antispam-mysql.server
