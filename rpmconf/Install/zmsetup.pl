@@ -5823,10 +5823,10 @@ sub applyConfig {
   # Generating dhparam key
   if ($newinstall) {
     progress("Generating dhparam key...");
-    my $rc = runAsZextras ("/opt/zextras/common/bin/openssl dhparam -out /opt/zextras/conf/dhparam.pem.zcs 2048 > /dev/null 2>&1");
+    my $rc = runAsZextras ("/opt/zextras/common/bin/openssl dhparam -out /opt/zextras/conf/dhparam.pem.crb 2048 > /dev/null 2>&1");
     if( $rc != 0 ){
-        progress("failed to generate dhparam key");
-        progress("Carbonio bootstrap process exited cause one of the subprocess failed.");
+        progress("\nfailed to generate dhparam key");
+        progress("\nCarbonio bootstrap process exited cause one of the subprocess failed.\n");
         exit();
     }else{
         progress ("done.\n");
@@ -5835,7 +5835,7 @@ sub applyConfig {
 
   # Added the following for bug 103803. Could not just add the cert as a globalConfigValue
   # for zimbraSSldHParam.  See bug 104244.
-  setLdapGlobalConfig("zimbraSSLDHParam", "/opt/zextras/conf/dhparam.pem.zcs") if $newinstall;
+  setLdapGlobalConfig("zimbraSSLDHParam", "/opt/zextras/conf/dhparam.pem.crb") if $newinstall;
 
   if (isEnabled("carbonio-appserver")) {
 
