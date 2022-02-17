@@ -5823,7 +5823,7 @@ sub applyConfig {
   # Generating dhparam key
   if ($newinstall) {
     progress("Generating dhparam key...");
-    $rc = runAsZextras ("/opt/zextras/common/bin/openssl dhparam -out /opt/zextras/conf/dhparam.pem.zcs 2048 > /dev/null 2>&1");
+    my $rc = runAsZextras ("/opt/zextras/common/bin/openssl dhparam -out /opt/zextras/conf/dhparam.pem.zcs 2048 > /dev/null 2>&1");
     if( $rc != 0 ){
         progress("failed to generate dhparam key");
         progress("Carbonio bootstrap process exited cause one of the subprocess failed.");
