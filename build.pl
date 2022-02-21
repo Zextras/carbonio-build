@@ -357,17 +357,12 @@ sub Build($)
       ant => [
          "-Ddebug=$CFG{BUILD_DEBUG_FLAG}",
          "-Dis-production=$CFG{BUILD_PROD_FLAG}",
-         "-Dzimbra.buildinfo.version=$CFG{BUILD_RELEASE_NO}_$CFG{BUILD_RELEASE_CANDIDATE}_$CFG{BUILD_NO}",
-         "-Dzimbra.buildinfo.majorversion=$CFG{BUILD_RELEASE_MAJOR}",
-         "-Dzimbra.buildinfo.minorversion=$CFG{BUILD_RELEASE_MINOR}",
-         "-Dzimbra.buildinfo.microversion=$CFG{BUILD_RELEASE_MICRO}",
-         "-Dzimbra.buildinfo.buildnum=$CFG{BUILD_NO}",
+         "-Dcarbonio.buildinfo.version=$CFG{BUILD_RELEASE_NO}_$CFG{BUILD_RELEASE_CANDIDATE}_$CFG{BUILD_NO}",
       ],
       make => [
          "debug=$CFG{BUILD_DEBUG_FLAG}",
          "is-production=$CFG{BUILD_PROD_FLAG}",
-         "zimbra.buildinfo.version=$CFG{BUILD_RELEASE_NO}_$CFG{BUILD_RELEASE_CANDIDATE}_$CFG{BUILD_NO}",
-         "zimbra.buildinfo.buildnum=$CFG{BUILD_NO}",
+         "carbonio.buildinfo.version=$CFG{BUILD_RELEASE_NO}_$CFG{BUILD_RELEASE_CANDIDATE}_$CFG{BUILD_NO}",
       ],
       mvn => [
       ],
