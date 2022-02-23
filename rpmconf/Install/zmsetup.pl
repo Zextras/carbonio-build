@@ -5766,7 +5766,7 @@ sub configSetEnabledServices {
 sub failConfig {
   progress ("\n\nERROR\n\n");
   progress ("\n\nConfiguration failed\n\n");
-  progress ("Please address the error and re-run /opt/zextras/libexec/zmsetup.pl to\n");
+  progress ("Please address the error and re-run carbonio-bottstrap to\n");
   progress ("complete the configuration.\n");
   progress ("\nErrors have been logged to $logfile\n\n");
   exit 1;
