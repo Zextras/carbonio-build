@@ -402,8 +402,7 @@ main()
    Copy ${repoDir}/zm-ldap-utilities/src/libexec/zmslapd                                            ${repoDir}/zm-build/${currentPackage}/opt/zextras/libexec/zmslapd
    Copy ${repoDir}/zm-ldap-utilities/src/libexec/zmslapindex                                        ${repoDir}/zm-build/${currentPackage}/opt/zextras/libexec/zmslapindex
    Copy ${repoDir}/zm-ldap-utilities/src/libexec/zmstat-ldap                                        ${repoDir}/zm-build/${currentPackage}/opt/zextras/libexec/zmstat-ldap
-   Copy ${repoDir}/zm-ldap-utilities/src/libexec/ldapattribupdate                                        ${repoDir}/zm-build/${currentPackage}/opt/zextras/libexec/ldapattribupdate
-
+   Copy ${repoDir}/zm-ldap-utilities/src/libexec/ldapattributeupdate                                 ${repoDir}/zm-build/${currentPackage}/opt/zextras/libexec/ldapattributeupdate
 
    Copy ${repoDir}/zm-mta/cbpolicyd.conf.in                                                         ${repoDir}/zm-build/${currentPackage}/opt/zextras/conf/cbpolicyd.conf.in
    Copy ${repoDir}/zm-mta/clamd.conf.in                                                             ${repoDir}/zm-build/${currentPackage}/opt/zextras/conf/clamd.conf.in
