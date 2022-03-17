@@ -138,22 +138,12 @@
       },
    },
    {
-      "dir"         => "zm-web-client",
-      "ant_targets"     => ["pkg"],
-      "deploy_pkg_into" => "bundle",
-   },
-   {
       "dir"         => "zm-db-conf",
       "ant_targets" => undef,
       "stage_cmd"   => sub {
          SysExec("(cd .. && rsync -az --relative zm-db-conf/src/db/migration $CFG{BUILD_DIR}/)");
          SysExec("(cd .. && rsync -az --relative zm-db-conf/src/db/mysql     $CFG{BUILD_DIR}/)");
       },
-   },
-   {
-      "dir"         => "zm-admin-console",
-      "ant_targets" => ["pkg"],
-      "deploy_pkg_into" => "bundle",
    },
    {
       "dir"         => "zm-amavis",
@@ -206,14 +196,6 @@
       "dir"         => "ical4j-0.9.16-patched",
       "ant_targets" => [ "clean-compile", "package" ],
       "stage_cmd"   => undef,
-   },
-   {
-      "dir"         => "zm-zcs-lib",
-      "ant_targets" => ["dist", "pkg"],
-      "stage_cmd"   => sub {
-         SysExec("(cd .. && rsync -az --relative zm-zcs-lib $CFG{BUILD_DIR}/)");
-      },
-      "deploy_pkg_into" => "bundle",
    },
    {
       "dir"         => "zm-jython",
