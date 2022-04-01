@@ -12,7 +12,6 @@ use Exporter;
 @EXPORT = qw(
     zmstatInit getZextrasUser getZimbraServerHostname
     getZmstatRoot getZmstatInterval
-    isLinux isMac
     percent getTstamp getDate waitUntilNiceRoundSecond
     getPidFileDir readPidFile createPidFile
     getLogFilePath openLogFile rotateLogFile

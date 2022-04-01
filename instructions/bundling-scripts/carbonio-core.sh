@@ -223,7 +223,6 @@ main()
    Copy ${repoDir}/zm-core-utils/src/libexec/zmstatuslog                                            ${repoDir}/zm-build/${currentPackage}/opt/zextras/libexec/zmstatuslog
    Copy ${repoDir}/zm-core-utils/src/libexec/zmsyslogsetup                                          ${repoDir}/zm-build/${currentPackage}/opt/zextras/libexec/zmsyslogsetup
    Copy ${repoDir}/zm-core-utils/src/libexec/zmthreadcpu                                            ${repoDir}/zm-build/${currentPackage}/opt/zextras/libexec/zmthreadcpu
-   Copy ${repoDir}/zm-core-utils/src/perl/migrate20131014-removezca.pl                              ${repoDir}/zm-build/${currentPackage}/opt/zextras/libexec/scripts/migrate20131014-removezca.pl
 
    Copy ${repoDir}/zm-db-conf/src/db/migration/Migrate.pm                                           ${repoDir}/zm-build/${currentPackage}/opt/zextras/libexec/scripts/Migrate.pm
    Copy ${repoDir}/zm-db-conf/src/db/migration/clearArchivedFlag.pl                                 ${repoDir}/zm-build/${currentPackage}/opt/zextras/libexec/scripts/clearArchivedFlag.pl
