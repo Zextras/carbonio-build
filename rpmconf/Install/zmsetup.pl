@@ -2733,12 +2733,10 @@ sub setPublicServiceHostname {
         last;
       }
       $config{PUBLICSERVICEHOSTNAME} = $old;
-    } else {last;}
-  }
-  $config{PUBLICSERVICEHOSTNAME} = lc($config{PUBLICSERVICEHOSTNAME});
-
-  if ($config{PUBLICSERVICEHOSTNAME} eq $old) {
-    changePublicServiceHostname($config{PUBLICSERVICEHOSTNAME});
+    }
+    else {
+      last;
+    }
   }
 }
 
