@@ -1081,6 +1081,11 @@ sub setLdapDefaults {
     $config{HTTPPROXY}             = getLdapServerValue("zimbraReverseProxyHttpEnabled");
     $config{SMTPHOST}              = getLdapServerValue("zimbraSmtpHostname");
 
+    $config{PUBLICSERVICEHOSTNAME} = getLdapServerValue("zimbraPublicServiceHostname");
+    if ($config{PUBLICSERVICEHOSTNAME} eq "") {
+      $config{PUBLICSERVICEHOSTNAME} = "UNSET";
+    }
+
     $config{zimbraReverseProxyLookupTarget} = getLdapServerValue("zimbraReverseProxyLookupTarget")
       if ($config{zimbraReverseProxyLookupTarget} eq "");
 
@@ -3213,11 +3218,6 @@ sub createProxyMenu {
 
   $$lm{createsub} = \&createProxyMenu;
   $$lm{createarg} = $package;
-
-  $config{PUBLICSERVICEHOSTNAME} = getLdapServerValue("zimbraPublicServiceHostname");
-  if ($config{PUBLICSERVICEHOSTNAME} eq "") {
-    $config{PUBLICSERVICEHOSTNAME} = "UNSET";
-  }
 
   my $i = 2;
   if (isInstalled($package)) {
