@@ -2250,6 +2250,7 @@ sub toggleYN {
   my $key = shift;
   $config{$key} = ($config{$key} eq "yes")?"no":"yes";
 }
+
 sub toggleTF {
   my $key = shift;
   $config{$key} = ($config{$key} eq "TRUE")?"FALSE":"TRUE";
@@ -2259,11 +2260,6 @@ sub toggleTF {
   if ($key eq "HTTPPROXY") {
     &toggleWebProxy();
   }
-}
-
-sub toggleSERVICEWEBAPP {
-    my $key = shift;
-    $config{SERVICEWEBAPP} = ($config{SERVICEWEBAPP} eq "yes")?"no":"yes";
 }
 
 sub toggleConfigEnabled {
@@ -2672,120 +2668,6 @@ sub setLdapReplicationType {
       return;
     }
     print "Please enter a valid replication type!\n";
-  }
-}
-
-sub setHttpPort {
-  $config{HTTPPORT} = askNum("Please enter the HTTP server port:",
-      $config{HTTPPORT});
-
-  if($config{HTTPPROXY} eq "TRUE" || $config{zimbraMailProxy} eq "TRUE") {
-    if($config{HTTPPORT} == $config{HTTPPROXYPORT}) {
-      $config{HTTPPROXYPORT}="UNSET";
-    }
-  } elsif (isInstalled("carbonio-appserver") && !isInstalled("carbonio-proxy")) {
-    if($config{HTTPPORT} == $config{HTTPPROXYPORT}) {
-      if ($config{HTTPPORT} > 8000) {
-        $config{HTTPPROXYPORT} = $config{HTTPPORT} - 8000;
-      } else {
-        $config{HTTPPROXYPORT} = $config{HTTPPORT} + 8000;
-      }
-    }
-  }
-}
-
-sub setHttpsPort {
-  $config{HTTPSPORT} = askNum("Please enter the HTTPS server port:",
-      $config{HTTPSPORT});
-
-  if($config{HTTPPROXY} eq "TRUE" || $config{zimbraMailProxy} eq "TRUE") {
-    if($config{HTTPSPORT} == $config{HTTPSPROXYPORT}) {
-      $config{HTTPSPROXYPORT}="UNSET";
-    }
-  } elsif (isInstalled("carbonio-appserver") && !isInstalled("carbonio-proxy")) {
-    if($config{HTTPSPORT} == $config{HTTPSPROXYPORT}) {
-      if ($config{HTTPSPORT} > 8000) {
-        $config{HTTPSPROXYPORT} = $config{HTTPSPORT} - 8000;
-      } else {
-        $config{HTTPSPROXYPORT} = $config{HTTPSPORT} + 8000;
-      }
-    }
-  }
-}
-
-sub setImapPort {
-  $config{IMAPPORT} = askNum("Please enter the IMAP server port:",
-      $config{IMAPPORT});
-
-  if($config{MAILPROXY} eq "TRUE" || $config{zimbraMailProxy} eq "TRUE") {
-    if($config{IMAPPORT} == $config{IMAPPROXYPORT}) {
-      $config{IMAPPROXYPORT}="UNSET";
-    }
-  } elsif (isInstalled("carbonio-appserver") && !isInstalled("carbonio-proxy")) {
-    if($config{IMAPPORT} == $config{IMAPPROXYPORT}) {
-      if ($config{IMAPPORT} > 7000) {
-        $config{IMAPPROXYPORT} = $config{IMAPPORT} - 7000;
-      } else {
-        $config{IMAPPROXYPORT} = $config{IMAPPORT} + 7000;
-      }
-    }
-  }
-}
-
-sub setImapSSLPort {
-  $config{IMAPSSLPORT} = askNum("Please enter the IMAP SSL server port:",
-      $config{IMAPSSLPORT});
-
-  if($config{MAILPROXY} eq "TRUE" || $config{zimbraMailProxy} eq "TRUE") {
-    if($config{IMAPSSLPORT} == $config{IMAPSSLPROXYPORT}) {
-      $config{IMAPSSLPROXYPORT}="UNSET";
-    }
-  } elsif (isInstalled("carbonio-appserver") && !isInstalled("carbonio-proxy")) {
-    if($config{IMAPSSLPORT} == $config{IMAPSSLPROXYPORT}) {
-      if ($config{IMAPSSLPORT} > 7000) {
-        $config{IMAPSSLPROXYPORT} = $config{IMAPSSLPORT} - 7000;
-      } else {
-        $config{IMAPSSLPROXYPORT} = $config{IMAPSSLPORT} + 7000;
-      }
-    }
-  }
-}
-
-sub setPopPort {
-  $config{POPPORT} = askNum("Please enter the POP server port:",
-      $config{POPPORT});
-
-  if($config{MAILPROXY} eq "TRUE" || $config{zimbraMailProxy} eq "TRUE") {
-    if($config{POPPORT} == $config{POPPROXYPORT}) {
-      $config{POPPROXYPORT}="UNSET";
-    }
-  } elsif (isInstalled("carbonio-appserver") && !isInstalled("carbonio-proxy")) {
-    if($config{POPPORT} == $config{POPPROXYPORT}) {
-      if ($config{POPPORT} > 7000) {
-        $config{POPPROXYPORT} = $config{POPPORT} - 7000;
-      } else {
-        $config{POPPROXYPORT} = $config{POPPORT} + 7000;
-      }
-    }
-  }
-}
-
-sub setPopSSLPort {
-  $config{POPSSLPORT} = askNum("Please enter the POP SSL server port:",
-      $config{POPSSLPORT});
-
-  if($config{MAILPROXY} eq "TRUE" || $config{zimbraMailProxy} eq "TRUE") {
-    if($config{POPSSLPORT} == $config{POPSSLPROXYPORT}) {
-      $config{POPSSLPROXYPORT}="UNSET";
-    }
-  } elsif (isInstalled("carbonio-appserver") && !isInstalled("carbonio-proxy")) {
-    if($config{POPSSLPORT} == $config{POPSSLPROXYPORT}) {
-      if ($config{POPSSLPORT} > 7000) {
-        $config{POPSSLPROXYPORT} = $config{POPSSLPORT} - 7000;
-      } else {
-        $config{POPSSLPROXYPORT} = $config{POPSSLPORT} + 7000;
-      }
-    }
   }
 }
 
@@ -3324,20 +3206,6 @@ sub createProxyMenu {
     };
     $i++;
     if($config{MAILPROXY} eq "TRUE") {
-       if(!isEnabled("carbonio-appserver")) {
-          $$lm{menuitems}{$i} = {
-            "prompt" => "IMAP server port:",
-            "var" => \$config{IMAPPORT},
-            "callback" => \&setImapPort,
-            };
-          $i++;
-          $$lm{menuitems}{$i} = {
-            "prompt" => "IMAP server SSL port:",
-            "var" => \$config{IMAPSSLPORT},
-            "callback" => \&setImapSSLPort,
-            };
-          $i++;
-       }
        $$lm{menuitems}{$i} = {
          "prompt" => "IMAP proxy port:",
          "var" => \$config{IMAPPROXYPORT},
@@ -3350,20 +3218,6 @@ sub createProxyMenu {
          "callback" => \&setImapSSLProxyPort,
        };
        $i++;
-       if(!isEnabled("carbonio-appserver")) {
-          $$lm{menuitems}{$i} = {
-            "prompt" => "POP server port:",
-            "var" => \$config{POPPORT},
-            "callback" => \&setPopPort,
-            };
-          $i++;
-          $$lm{menuitems}{$i} = {
-            "prompt" => "POP server SSL port:",
-            "var" => \$config{POPSSLPORT},
-            "callback" => \&setPopSSLPort,
-            };
-          $i++;
-       }
        $$lm{menuitems}{$i} = {
          "prompt" => "POP proxy port:",
          "var" => \$config{POPPROXYPORT},
@@ -3398,20 +3252,6 @@ sub createProxyMenu {
     };
     $i++;
     if ($config{HTTPPROXY} eq "TRUE") {
-       if(!isEnabled("carbonio-appserver")) {
-          $$lm{menuitems}{$i} = {
-            "prompt" => "Web server HTTP port:",
-            "var" => \$config{HTTPPORT},
-            "callback" => \&setHttpPort,
-            };
-          $i++;
-          $$lm{menuitems}{$i} = {
-            "prompt" => "Web server HTTPS port:",
-            "var" => \$config{HTTPSPORT},
-            "callback" => \&setHttpsPort,
-            };
-          $i++;
-       }
        $$lm{menuitems}{$i} = {
          "prompt" => "HTTP proxy port:",
          "var" => \$config{HTTPPROXYPORT},
@@ -3512,18 +3352,6 @@ sub createStoreMenu {
       "callback" => \&setSmtpHost,
       };
     $i++;
-    $$lm{menuitems}{$i} = {
-      "prompt" => "Web server HTTP port:",
-      "var" => \$config{HTTPPORT},
-      "callback" => \&setHttpPort,
-      };
-    $i++;
-    $$lm{menuitems}{$i} = {
-      "prompt" => "Web server HTTPS port:",
-      "var" => \$config{HTTPSPORT},
-      "callback" => \&setHttpsPort,
-      };
-    $i++;
     if(!isEnabled("carbonio-proxy") && $config{"zimbraWebProxy"} eq "TRUE") {
        $$lm{menuitems}{$i} = {
          "prompt" => "HTTP proxy port:",
@@ -3544,18 +3372,6 @@ sub createStoreMenu {
       "callback" => \&setStoreMode,
       };
     $i++;
-    $$lm{menuitems}{$i} = {
-      "prompt" => "IMAP server port:",
-      "var" => \$config{IMAPPORT},
-      "callback" => \&setImapPort,
-      };
-    $i++;
-    $$lm{menuitems}{$i} = {
-      "prompt" => "IMAP server SSL port:",
-      "var" => \$config{IMAPSSLPORT},
-      "callback" => \&setImapSSLPort,
-      };
-    $i++;
     if(!isEnabled("carbonio-proxy") && $config{"zimbraMailProxy"} eq "TRUE") {
        $$lm{menuitems}{$i} = {
          "prompt" => "IMAP proxy port:",
@@ -3570,18 +3386,7 @@ sub createStoreMenu {
        };
        $i++;
     }
-    $$lm{menuitems}{$i} = {
-      "prompt" => "POP server port:",
-      "var" => \$config{POPPORT},
-      "callback" => \&setPopPort,
-      };
-    $i++;
-    $$lm{menuitems}{$i} = {
-      "prompt" => "POP server SSL port:",
-      "var" => \$config{POPSSLPORT},
-      "callback" => \&setPopSSLPort,
-      };
-    $i++;
+
     if(!isEnabled("carbonio-proxy") && $config{"zimbraMailProxy"} eq "TRUE") {
        $$lm{menuitems}{$i} = {
          "prompt" => "POP proxy port:",
@@ -3596,36 +3401,6 @@ sub createStoreMenu {
        };
        $i++;
     }
-    if (!isInstalled("carbonio-proxy") && $newinstall) {
-      $$lm{menuitems}{$i} = {
-        "prompt" => "Configure for use with mail proxy:",
-        "var" => \$config{zimbraMailProxy},
-        "callback" => \&toggleTF,
-        "arg" => "zimbraMailProxy",
-      };
-      $i++;
-      $$lm{menuitems}{$i} = {
-        "prompt" => "Configure for use with web proxy:",
-        "var" => \$config{zimbraWebProxy},
-        "callback" => \&toggleTF,
-        "arg" => "zimbraWebProxy",
-      };
-      $i++;
-    }
-    $$lm{menuitems}{$i} = {
-      "prompt" => "Install mailstore (service webapp):",
-      "var" => \$config{SERVICEWEBAPP},
-      "callback" => \&toggleSERVICEWEBAPP,
-      "arg" => "SERVICEWEBAPP"
-    };
-    $i++;
-    $$lm{menuitems}{$i} = {
-      "prompt" => "Install UI (zimbra,zimbraAdmin webapps):",
-      "var" => \$config{UIWEBAPPS},
-      "callback" => \&toggleYN,
-      "arg" => "UIWEBAPPS"
-    };
-    $i++;
   }
   return $lm;
 }
