@@ -5062,7 +5062,7 @@ sub configSetProxyPrefs {
      }
      if (!($config{PUBLICSERVICEHOSTNAME} eq "")) {
        progress("Set Public Service Hostname $config{PUBLICSERVICEHOSTNAME}...");
-       runAsZextras("$ZMPROV ms $config{HOSTNAME} zimbraPublicServiceHostname $config{PUBLICSERVICEHOSTNAME}");
+       runAsZextras("$ZMPROV mcf zimbraPublicServiceHostname $config{PUBLICSERVICEHOSTNAME}");
        progress("done.\n");
      }
    } else {
