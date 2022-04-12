@@ -1081,11 +1081,6 @@ sub setLdapDefaults {
     $config{HTTPPROXY}             = getLdapServerValue("zimbraReverseProxyHttpEnabled");
     $config{SMTPHOST}              = getLdapServerValue("zimbraSmtpHostname");
 
-    $config{PUBLICSERVICEHOSTNAME} = getLdapServerValue("zimbraPublicServiceHostname");
-    if ($config{PUBLICSERVICEHOSTNAME} eq "") {
-      $config{PUBLICSERVICEHOSTNAME} = "UNSET";
-    }
-
     $config{zimbraReverseProxyLookupTarget} = getLdapServerValue("zimbraReverseProxyLookupTarget")
       if ($config{zimbraReverseProxyLookupTarget} eq "");
 
@@ -3219,6 +3214,11 @@ sub createProxyMenu {
   $$lm{createsub} = \&createProxyMenu;
   $$lm{createarg} = $package;
 
+  $config{PUBLICSERVICEHOSTNAME} = getLdapServerValue("zimbraPublicServiceHostname");
+  if ($config{PUBLICSERVICEHOSTNAME} eq "") {
+    $config{PUBLICSERVICEHOSTNAME} = "UNSET";
+  }
+
   my $i = 2;
   if (isInstalled($package)) {
     $$lm{menuitems}{$i} = {
@@ -5059,6 +5059,11 @@ sub configSetProxyPrefs {
        if ( $memcachetargets[0] !~ /:11211/ ) {
          progress("WARNING: There are currently no memcached servers for the proxy.  Proxy will start once one becomes available.\n");
        }
+     }
+     if (!($config{PUBLICSERVICEHOSTNAME} eq "")) {
+       progress("Set Public Service Hostname $config{PUBLICSERVICEHOSTNAME}...");
+       runAsZextras("$ZMPROV ms $config{HOSTNAME} zimbraPublicServiceHostname $config{PUBLICSERVICEHOSTNAME}");
+       progress("done.\n");
      }
    } else {
      runAsZextras("/opt/zextras/libexec/zmproxyconfig -m -d -o ".
