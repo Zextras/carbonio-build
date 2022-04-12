@@ -1081,6 +1081,10 @@ sub setLdapDefaults {
     $config{HTTPPROXY}             = getLdapServerValue("zimbraReverseProxyHttpEnabled");
     $config{SMTPHOST}              = getLdapServerValue("zimbraSmtpHostname");
 
+    $config{PUBLICSERVICEHOSTNAME} = getLdapServerValue("zimbraPublicServiceHostname");
+    if ($config{PUBLICSERVICEHOSTNAME} eq "") {
+      $config{PUBLICSERVICEHOSTNAME} = "UNSET";
+    }
 
     $config{zimbraReverseProxyLookupTarget} = getLdapServerValue("zimbraReverseProxyLookupTarget")
       if ($config{zimbraReverseProxyLookupTarget} eq "");
@@ -2553,6 +2557,10 @@ sub changeLdapServerID {
   $config{LDAPSERVERID} = shift;
 }
 
+sub changePublicServiceHostname {
+  $config{PUBLICSERVICEHOSTNAME} = shift;
+}
+
 sub getDnsRecords {
   my $name = shift;
   my $qtype = shift;
@@ -2709,6 +2717,28 @@ sub setPopSSLProxyPort {
     if($config{POPSSLPROXYPORT} == $config{POPSSLPORT}) {
       $config{POPSSLPORT}="UNSET";
     }
+  }
+}
+
+sub setPublicServiceHostname {
+  my $old = $config{PUBLICSERVICEHOSTNAME};
+  while (1) {
+    $config{PUBLICSERVICEHOSTNAME} =
+        askNonBlank("Please enter the Public Service hostname (FQDN):",
+            $config{PUBLICSERVICEHOSTNAME});
+    if (lookupHostName ($config{PUBLICSERVICEHOSTNAME}, 'A')) {
+      progress("\n\nDNS ERROR resolving $config{PUBLICSERVICEHOSTNAME}\n");
+      progress("It is suggested that the Public Service Hostname be resolvable via DNS\n");
+      if (askYN("Re-Enter Public Service Hostname","Yes") eq "no") {
+        last;
+      }
+      $config{PUBLICSERVICEHOSTNAME} = $old;
+    } else {last;}
+  }
+  $config{PUBLICSERVICEHOSTNAME} = lc($config{PUBLICSERVICEHOSTNAME});
+
+  if ($config{PUBLICSERVICEHOSTNAME} eq $old) {
+    changePublicServiceHostname($config{PUBLICSERVICEHOSTNAME});
   }
 }
 
@@ -3230,6 +3260,12 @@ sub createProxyMenu {
          "callback" => \&setPopSSLProxyPort,
        };
        $i++;
+      $$lm{menuitems}{$i} = {
+          "prompt" => "Public Service Hostname:",
+          "var" => \$config{PUBLICSERVICEHOSTNAME},
+          "callback" => \&setPublicServiceHostname,
+      };
+      $i++;
     }
     if ($config{HTTPPROXY} eq "TRUE" || $config{MAILPROXY} eq "TRUE") {
       if ($config{ldap_nginx_password} eq "") {
