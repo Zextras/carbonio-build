@@ -1081,16 +1081,20 @@ sub setLdapDefaults {
     $config{HTTPPROXY}             = getLdapServerValue("zimbraReverseProxyHttpEnabled");
     $config{SMTPHOST}              = getLdapServerValue("zimbraSmtpHostname");
 
-    $config{PUBLICSERVICEHOSTNAME} = getLdapServerValue("zimbraPublicServiceHostname");
-    if ($config{PUBLICSERVICEHOSTNAME} eq "") {
-      $config{PUBLICSERVICEHOSTNAME} = lc(qx(hostname --fqdn));
-      if ($config{PUBLICSERVICEHOSTNAME} eq "") {
-        $config{PUBLICSERVICEHOSTNAME} = "UNSET";
-      }
-    }
-
     $config{zimbraReverseProxyLookupTarget} = getLdapServerValue("zimbraReverseProxyLookupTarget")
       if ($config{zimbraReverseProxyLookupTarget} eq "");
+
+
+    if ($config{PUBLICSERVICEHOSTNAME} eq "UNSET") {
+      $config{PUBLICSERVICEHOSTNAME} = getLdapServerValue("zimbraPublicServiceHostname");
+      if ($config{PUBLICSERVICEHOSTNAME} eq "") {
+        $config{PUBLICSERVICEHOSTNAME} = lc(qx(hostname --fqdn));
+        chomp $config{PUBLICSERVICEHOSTNAME};
+        if ($config{PUBLICSERVICEHOSTNAME} eq "") {
+          $config{PUBLICSERVICEHOSTNAME} = "UNSET";
+        }
+      }
+    }
 
     if (isEnabled("carbonio-mta")) {
       my $tmpval = getLdapServerValue("zimbraMtaMyNetworks");
@@ -1594,6 +1598,12 @@ sub setDefaults {
     $config{POPSSLPROXYPORT} = 7995;
     $config{HTTPPROXYPORT} = 8080;
     $config{HTTPSPROXYPORT} = 8443;
+  }
+
+  $config{PUBLICSERVICEHOSTNAME} = lc(qx(hostname --fqdn));
+  chomp $config{PUBLICSERVICEHOSTNAME};
+  if ($config{PUBLICSERVICEHOSTNAME} eq "") {
+    $config{PUBLICSERVICEHOSTNAME} = "UNSET";
   }
 
   if ($options{d}) {
