@@ -1083,7 +1083,10 @@ sub setLdapDefaults {
 
     $config{PUBLICSERVICEHOSTNAME} = getLdapServerValue("zimbraPublicServiceHostname");
     if ($config{PUBLICSERVICEHOSTNAME} eq "") {
-      $config{PUBLICSERVICEHOSTNAME} = "UNSET";
+      $config{PUBLICSERVICEHOSTNAME} = lc(qx(hostname --fqdn));
+      if ($config{PUBLICSERVICEHOSTNAME} eq "") {
+        $config{PUBLICSERVICEHOSTNAME} = "UNSET";
+      }
     }
 
     $config{zimbraReverseProxyLookupTarget} = getLdapServerValue("zimbraReverseProxyLookupTarget")
