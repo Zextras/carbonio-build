@@ -3085,6 +3085,12 @@ sub createLdapMenu {
       $config{LDAPROOTPASSSET} = "UNSET" unless ($config{LDAPROOTPASSSET} eq "Not Verified");
     }
     $$lm{menuitems}{$i} = {
+        "prompt" => "Public Service Hostname:",
+        "var" => \$config{PUBLICSERVICEHOSTNAME},
+        "callback" => \&setPublicServiceHostname,
+    };
+    $i++;
+    $$lm{menuitems}{$i} = {
       "prompt" => "Ldap root password:",
       "var" => \$config{LDAPROOTPASSSET},
       "callback" => \&setLdapRootPass
@@ -3271,12 +3277,6 @@ sub createProxyMenu {
          "callback" => \&setPopSSLProxyPort,
        };
        $i++;
-      $$lm{menuitems}{$i} = {
-          "prompt" => "Public Service Hostname:",
-          "var" => \$config{PUBLICSERVICEHOSTNAME},
-          "callback" => \&setPublicServiceHostname,
-      };
-      $i++;
     }
     if ($config{HTTPPROXY} eq "TRUE" || $config{MAILPROXY} eq "TRUE") {
       if ($config{ldap_nginx_password} eq "") {
