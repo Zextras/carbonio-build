@@ -2692,6 +2692,25 @@ sub setLdapReplicationType {
   }
 }
 
+sub setImapSSLPort {
+  $config{IMAPSSLPORT} = askNum("Please enter the IMAP SSL server port:",
+      $config{IMAPSSLPORT});
+
+  if($config{MAILPROXY} eq "TRUE" || $config{zimbraMailProxy} eq "TRUE") {
+    if($config{IMAPSSLPORT} == $config{IMAPSSLPROXYPORT}) {
+      $config{IMAPSSLPROXYPORT}="UNSET";
+    }
+  } elsif (isInstalled("carbonio-appserver") && !isInstalled("carbonio-proxy")) {
+    if($config{IMAPSSLPORT} == $config{IMAPSSLPROXYPORT}) {
+      if ($config{IMAPSSLPORT} > 7000) {
+        $config{IMAPSSLPROXYPORT} = $config{IMAPSSLPORT} - 7000;
+      } else {
+        $config{IMAPSSLPROXYPORT} = $config{IMAPSSLPORT} + 7000;
+      }
+    }
+  }
+}
+
 sub setImapProxyPort {
   $config{IMAPPROXYPORT} = askNum("Please enter the IMAP Proxy server port:",
       $config{IMAPPROXYPORT});
@@ -3253,6 +3272,14 @@ sub createProxyMenu {
     };
     $i++;
     if($config{MAILPROXY} eq "TRUE") {
+       if(!isEnabled("carbonio-appserver")) {
+          $$lm{menuitems}{$i} = {
+            "prompt" => "IMAP server SSL port:",
+            "var" => \$config{IMAPSSLPORT},
+            "callback" => \&setImapSSLPort,
+            };
+          $i++;
+       }
        $$lm{menuitems}{$i} = {
          "prompt" => "IMAP proxy port:",
          "var" => \$config{IMAPPROXYPORT},
@@ -3417,6 +3444,12 @@ sub createStoreMenu {
       "prompt" => "Web server mode:",
       "var" => \$config{MODE},
       "callback" => \&setStoreMode,
+      };
+    $i++;
+    $$lm{menuitems}{$i} = {
+      "prompt" => "IMAP server SSL port:",
+      "var" => \$config{IMAPSSLPORT},
+      "callback" => \&setImapSSLPort,
       };
     $i++;
     if(!isEnabled("carbonio-proxy") && $config{"zimbraMailProxy"} eq "TRUE") {
