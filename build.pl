@@ -138,8 +138,6 @@ sub InitGlobalBuildVars()
          { name => "DESTINATION_NAME",           type => "=s",  hash_src => \%cmd_hash, default_sub => sub { return &$destination_name_func; }, },
          { name => "BUILD_DIR",                  type => "=s",  hash_src => \%cmd_hash, default_sub => sub { return &$build_dir_func; }, },
          { name => "DUMP_CONFIG_TO",             type => "=s",  hash_src => \%cmd_hash, default_sub => sub { return undef; }, },
-         { name => "ARTIFACTORY_USER",           type => "=s",  hash_src => \%cmd_hash, default_sub => sub { return ""; }, },
-         { name => "ARTIFACTORY_PASSWORD",       type => "=s",  hash_src => \%cmd_hash, default_sub => sub { return ""; }, },
       );
 
       {
@@ -358,8 +356,6 @@ sub Build($)
    my $tool_attributes = {
       ant => [
          "-Ddebug=$CFG{BUILD_DEBUG_FLAG}",
-         "-Dartifactory_user=$CFG{ARTIFACTORY_USER}",
-         "-Dartifactory_password=$CFG{ARTIFACTORY_PASSWORD}",
          "-Dis-production=$CFG{BUILD_PROD_FLAG}",
          "-Dcarbonio.buildinfo.version=$CFG{BUILD_RELEASE_NO}_$CFG{BUILD_RELEASE_CANDIDATE}_$CFG{BUILD_NO}",
       ],
@@ -414,8 +410,16 @@ sub Build($)
                         if ( my $targets = $build_info->{ $tool . "_targets" } )    #Known values are: ant_targets, mvn_targets, make_targets
                         {
                            eval { SysExec( $tool, "clean" ) if ( !$ENV{ENV_SKIP_CLEAN_FLAG} ); };
-                           SysExec( $tool, @{ $tool_attributes->{$tool} || [] }, @$targets );
-                           printf("DAVIDE BUILD TEST:")
+                           # prepare tool call with options and arguments
+                           my @tool_array=($tool);
+                           push(@tool_array, @{ $tool_attributes->{$tool} || [] }, @$targets);
+                           my $tool_call=join(" ", @tool_array);
+                           # execute on bash (having issues when perl not using bash shell)
+                           my $to_exec= "/bin/bash -c '$tool_call'";
+                           if (system($to_exec)!=0){
+                              print "FAILED: $to_exec";
+                              exit 1;
+                           }
                         }
                      }
                   }
