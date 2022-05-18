@@ -5328,6 +5328,7 @@ sub configCreateDomain {
           "$config{CREATEADMIN} \'$config{CREATEADMINPASS}\' ".
           "zimbraAdminConsoleUIComponents cartBlancheUI ".
           "description \'Administrative Account\' ".
+          "displayName \'Carbonio Admin\' ".
           "zimbraIsAdminAccount TRUE");
         progress(($rc == 0) ? "done.\n" : "failed.\n");
       }
