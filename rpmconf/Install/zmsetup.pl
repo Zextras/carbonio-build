@@ -4665,13 +4665,15 @@ sub configSaveCert {
     configLog("configSaveCert");
     return 0;
   }
-  progress ( "Saving SSL Certificate in ldap..." );
-  my $rc = runAsZextras("/opt/zextras/bin/zmcertmgr savecrt $ssl_cert_type");
-  if ($rc != 0) {
-    progress ( "failed.\n" );
-    exit 1;
-  } else {
-    progress ( "done.\n" );
+  if (-f "/opt/zextras/ssl/carbonio/server/server.crt") {
+    progress ( "Saving SSL Certificate in ldap..." );
+    my $rc = runAsZextras("/opt/zextras/bin/zmcertmgr savecrt $ssl_cert_type");
+    if ($rc != 0) {
+      progress ( "failed.\n" );
+      exit 1;
+    } else {
+      progress ( "done.\n" );
+    }
   }
   configLog("configSaveCert");
 }
