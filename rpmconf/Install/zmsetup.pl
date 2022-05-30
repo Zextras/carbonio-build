@@ -5154,43 +5154,6 @@ sub countUsers {
   return(($count > 0) ? "$count" : undef);
 }
 
-
-sub zimletCleanup {
-  my $ldap_pass = getLocalConfig("zimbra_ldap_password");
-  my $ldap_master_url = getLocalConfig("ldap_master_url");
-  my $ldap;
-  my @masters=split(/ /, $ldap_master_url);
-  my $master_ref=\@masters;
-  unless($ldap = Net::LDAP->new($master_ref)) {
-    detail("Unable to contact $ldap_master_url: $!");
-    return 1;
-  }
-  my $ldap_dn = $config{zimbra_ldap_userdn};
-  my $ldap_base = "cn=zimlets,$config{ldap_dit_base_dn_config}";
-
-  my $result = $ldap->bind($ldap_dn, password => $ldap_pass);
-  if ($result->code()) {
-    detail("ldap bind failed for $ldap_dn");
-    return 1;
-  } else {
-    detail("ldap bind done for $ldap_dn");
-    $result = $ldap->search(base => $ldap_base, scope => 'one', filter => "(|(cn=zimbra_cert_manager)(cn=com_zimbra_search)(cn=com_zimbra_domainadmin)(cn=com_zimbra_tinymce)(cn=com_zimbra_tasksreminder)(cn=com_zimbra_linkedin)(cn=com_zimbra_social)(cn=com_zimbra_dnd)(cn=com_zextras_chat_open)(cn=com_zextras_talk))", attrs => ['cn']);
-    return $result if ($result->code());
-    detail("Processing ldap search results");
-    foreach my $entry ($result->all_entries) {
-      my $zimlet = $entry->get_value('cn');
-      if ( $zimlet ne "" ) {
-        detail("Removing $zimlet");
-        runAsZextras("/opt/zextras/bin/zmzimletctl -l undeploy $zimlet");
-        system("rm -rf $config{mailboxd_directory}/webapps/service/zimlet/$zimlet")
-          if (-d "$config{mailboxd_directory}/webapps/service/zimlet/$zimlet" );
-      }
-    }
-  }
-  $result = $ldap->unbind;
-  return 0;
-}
-
 sub configInstallZimlets {
 
   if ($configStatus{configInstallZimlets} eq "CONFIGURED") {
@@ -5209,75 +5172,6 @@ sub configInstallZimlets {
 
   system("/bin/rm -rf $zimlet_properties")
     if ( -d $zimlet_properties);
-
-  # remove deprecated zimlets on upgrades
-  if (!$newinstall) {
-    progress("Checking for deprecated zimlets...");
-    progress((zimletCleanup()) ? "failed.\n" : "done.\n");
-  }
-
-  # Install zimlets
-  if (opendir DIR, "/opt/zextras/zimlets") {
-    progress ( "Installing common zimlets...\n" );
-    my @core_zimlets = (qw(com_zimbra_dnd com_zimbra_url com_zimbra_date com_zimbra_email com_zimbra_attachcontacts com_zimbra_attachmail));
-    my @zimlets = grep { !/^\./ } readdir(DIR);
-    foreach my $zimletfile (@zimlets) {
-      my $zimlet = $zimletfile;
-      $zimlet =~ s/\.zip$//;
-      progress  ("\t$zimlet...");
-      my $rc = runAsZextras ("/opt/zextras/bin/zmzimletctl -l deploy zimlets/$zimletfile");
-      if ($rc == 0) {
-        setLdapCOSConfig("+zimbraZimletAvailableZimlets", "!$zimlet")
-          if (grep(/$zimlet/, @core_zimlets));
-        progress("done.\n");
-      } else {
-        progress("failed. This may impact system functionality.\n");
-      }
-
-    }
-    progress ( "Finished installing common zimlets.\n" );
-  }
-
-  # Reinstall extras that are deployed on upgrade
-  if (!$newinstall) {
-    my $ldap_pass = getLocalConfig("zimbra_ldap_password");
-    my $ldap_master_url = getLocalConfig("ldap_master_url");
-    my $ldap;
-    my @masters=split(/ /, $ldap_master_url);
-    my $master_ref=\@masters;
-    unless($ldap = Net::LDAP->new($master_ref)) {
-      detail("Unable to contact $ldap_master_url: $!");
-      return 1;
-    }
-    my $ldap_dn = $config{zimbra_ldap_userdn};
-    my $ldap_base = "cn=zimlets,$config{ldap_dit_base_dn_config}";
-
-    my $result = $ldap->bind($ldap_dn, password => $ldap_pass);
-    if ($result->code()) {
-      detail("ldap bind failed for $ldap_dn");
-      return 1;
-    } else {
-      detail("ldap bind done for $ldap_dn");
-      progress("Getting list of all zimlets...");
-      $result = $ldap->search(base => $ldap_base, scope => 'one', filter => '(objectClass=zimbraZimletEntry)', attrs => ['cn']);
-      progress (($result->code()) ? "failed.\n" : "done.\n");
-      return $result if ($result->code());
-
-      progress("Updating non-standard zimlets...\n");
-      foreach my $entry ($result->all_entries) {
-        my $zimlet = $entry->get_value('cn');
-        foreach my $type (qw(zimlets-admin-extra zimlets-experimental zimlets-extra)) {
-          if (-e "/opt/zextras/${type}/${zimlet}.zip") {
-           progress  ("\t$zimlet...");
-           my $rc = runAsZextras ("/opt/zextras/bin/zmzimletctl -l deploy ${type}/${zimlet}.zip");
-           progress (($rc == 0) ? "done.\n" : "failed. This may impact system functionality.\n");
-          }
-        }
-      }
-      progress("Finished updating non-standard zimlets.\n");
-    $result = $ldap->unbind;
-    }
-  }
 
   configLog("configInstallZimlets");
 }
@@ -5753,10 +5647,6 @@ sub applyConfig {
     # only after the application server is running.
     if (isEnabled("carbonio-appserver")) {
       configInstallZimlets();
-
-      progress ( "Restarting mailboxd...");
-      runAsZextras("/opt/zextras/bin/zmmailboxdctl restart");
-      progress ( "done.\n" );
     }
     if ($newinstall && isStoreServiceNode()) {
       configCreateDefaultDomainGALSyncAcct();
