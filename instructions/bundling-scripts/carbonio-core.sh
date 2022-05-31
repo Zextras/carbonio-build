@@ -73,6 +73,7 @@ main()
    Copy ${repoDir}/zm-core-utils/src/bin/antispam-mysql                                             ${repoDir}/zm-build/${currentPackage}/opt/zextras/bin/antispam-mysql
    Copy ${repoDir}/zm-core-utils/src/bin/antispam-mysql.server                                      ${repoDir}/zm-build/${currentPackage}/opt/zextras/bin/antispam-mysql.server
    Copy ${repoDir}/zm-core-utils/src/bin/antispam-mysqladmin                                        ${repoDir}/zm-build/${currentPackage}/opt/zextras/bin/antispam-mysqladmin
+   Copy ${repoDir}/zm-core-utils/src/bin/carbonio                                                   ${repoDir}/zm-build/${currentPackage}/opt/zextras/bin/carbonio
    Copy ${repoDir}/zm-core-utils/src/bin/ldap.production                                            ${repoDir}/zm-build/${currentPackage}/opt/zextras/bin/ldap
    Copy ${repoDir}/zm-core-utils/src/bin/mysql                                                      ${repoDir}/zm-build/${currentPackage}/opt/zextras/bin/mysql
    Copy ${repoDir}/zm-core-utils/src/bin/mysql.server                                               ${repoDir}/zm-build/${currentPackage}/opt/zextras/bin/mysql.server
