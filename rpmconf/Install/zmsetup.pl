@@ -5429,14 +5429,6 @@ sub configInitSql {
     progress ( "Initializing store sql database..." );
     runAsZextras ("/opt/zextras/libexec/zmmyinit --mysql_memory_percent $config{MYSQLMEMORYPERCENT}");
     progress ( "done.\n" );
-    progress ( "Setting SmtpHostname for $config{HOSTNAME}..." );
-
-    #SMTP host can be one or more values seperated by comma or space.
-    my @smtphost = split /[,\s]+/, $config{SMTPHOST};
-    foreach(@smtphost) {
-       my $rc = setLdapServerConfig("+zimbraSmtpHostname", $_);
-       progress(($rc == 0) ? "done.\n" : "failed.\n");
-    }
   }
   configLog("configInitSql");
 }
