@@ -11,7 +11,7 @@ fi
 USERNAME="zextras"
 export USERNAME
 
-export LANG=C
-export LC_ALL=C
+export LANG=C.UTF-8
+export LC_ALL=C.UTF-8
 unset CLASSPATH
 unset DYLD_LIBRARY_PATH
